@@ -1,0 +1,20 @@
+{
+  "name": "nadeo",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "build": "tsc"
+  },
+  "author": "Maks0u",
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
+    "@types/node": "^18.13.0"
+  },
+  "dependencies": {
+    "axios": "^1.3.3"
+  }
+}
