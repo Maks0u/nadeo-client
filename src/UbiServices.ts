@@ -19,9 +19,9 @@ export default class UbiServices {
 
     constructor() {}
 
-    protected async connect(): Promise<{ accessToken: string; refreshToken: string }> {
+    protected async connect(audience: string = 'NadeoServices'): Promise<{ accessToken: string; refreshToken: string }> {
         const ticket = await this.requestTicket();
-        return await this.requestTokens(ticket);
+        return await this.requestTokens(ticket, audience);
     }
 
     private async requestTicket(): Promise<string> {
@@ -36,14 +36,10 @@ export default class UbiServices {
                 },
             }
         );
-        console.log(`Ticket request from ${response.data.nameOnPlatform}`);
         return response.data.ticket;
     }
 
-    private async requestTokens(
-        ticket: string,
-        audience: string = 'NadeoServices'
-    ): Promise<{ accessToken: string; refreshToken: string }> {
+    private async requestTokens(ticket: string, audience: string): Promise<{ accessToken: string; refreshToken: string }> {
         const url = new URL('v2/authentication/token/ubiservices', NadeoServices.BASEURL);
         const response = await UbiServices.AXIOS.post(
             url.href,

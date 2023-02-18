@@ -1,16 +1,51 @@
-//     await service.mapRecords(
-//         ['04bffe12-8efd-46cc-9eba-6c606574e5dc', '724aaf97-e817-4fea-80ae-b12671c49ecd'],
-//         ['778c1c1e-f709-4c4a-8f4b-08c8984fd545']
-//     )
-
 import Client from './src/Client.js';
+import { formatTime } from './src/Utils.js';
 
 async function main() {
     const client = new Client();
-    const records = await client.getMapRecords(
-        ['04bffe12-8efd-46cc-9eba-6c606574e5dc', '724aaf97-e817-4fea-80ae-b12671c49ecd'],
-        ['778c1c1e-f709-4c4a-8f4b-08c8984fd545']
+    const campaign = await client.getCampaign('1v1 SunSet');
+    const mapUids = campaign.campaign.playlist.map(item => item.mapUid);
+
+    const mapIds = await Promise.all(
+        mapUids.map(async uid => {
+            const map = await client.getMap(uid);
+            return map.mapId;
+        })
     );
-    console.log(records);
+
+    const members = await client.getClubMembers('51630');
+    const membersIds = members.clubMemberList.map(m => m.accountId);
+
+    const displayNames = await client.getDisplayNames(membersIds);
+
+    const records = await client.getMapRecords(membersIds, mapIds);
+
+    let mapLeaderboards = {};
+    mapIds.forEach(id => (mapLeaderboards[id] = []));
+
+    records.forEach(r => {
+        mapLeaderboards[r.mapId].push({
+            accountId: r.accountId,
+            displayName: displayNames.filter(item => r.accountId === item.accountId)[0]?.displayName,
+            time: r.recordScore.time,
+        });
+    });
+
+    Object.values(mapLeaderboards).forEach(l => l.sort((a, b) => a.time - b.time));
+
+    let table = [];
+    Object.values(mapLeaderboards).forEach(l => {
+        const firstValue = l.shift();
+        table.push(
+            l.reduce(
+                (previous, current) => `${previous}\n${formatTime(current.time)} - ${current.displayName}`,
+                `${formatTime(firstValue.time)} - ${firstValue.displayName}`
+            )
+        );
+        table.push('');
+    });
+
+    console.log(table.reduce((previous, current) => `${previous}\n${current}`));
 }
+
 main();
