@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import NadeoServices from './NadeoServices.js';
 
 export default class UbiServices {
-    private static USER_AGENT: string = process.env.USER_AGENT || '';
+    private static USER_AGENT: string = process.env.UBI_USER_AGENT || '';
     private static UBI_BASE: string = process.env.UBI_BASE || '';
     private static UBI_APP_ID: string = process.env.UBI_APP_ID || '';
     private static BASIC_AUTH: string = `Basic ${Buffer.from(
