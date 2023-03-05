@@ -3,12 +3,12 @@ import NadeoServices from './NadeoServices.js';
 import Token from './Token.js';
 import UbiServices from './UbiServices.js';
 export default class Client extends UbiServices {
+    coreToken = new Token();
+    coreRefreshToken = new Token();
+    liveToken = new Token();
+    liveRefreshToken = new Token();
     constructor() {
         super();
-        this.coreToken = new Token();
-        this.coreRefreshToken = new Token();
-        this.liveToken = new Token();
-        this.liveRefreshToken = new Token();
     }
     async getCoreToken() {
         if (this.coreToken.isEmpty() || this.coreRefreshToken.isExpired()) {

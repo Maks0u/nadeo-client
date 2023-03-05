@@ -1,4 +1,5 @@
 export default class Token {
+    token;
     constructor(token = '') {
         this.token = token;
     }
@@ -26,6 +27,19 @@ export default class Token {
     }
 }
 class DecodedToken {
+    jti;
+    iss;
+    iat;
+    rat;
+    exp;
+    aud;
+    usg;
+    sid;
+    sub;
+    aun;
+    rtk;
+    pce;
+    ubiservices_uid;
     constructor(token) {
         const decoded = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString('utf-8'));
         this.jti = decoded.jti;

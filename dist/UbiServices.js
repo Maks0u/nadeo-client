@@ -1,6 +1,16 @@
 import axios from 'axios';
 import NadeoServices from './NadeoServices.js';
 export default class UbiServices {
+    static USER_AGENT = process.env.UBI_USER_AGENT || '';
+    static UBI_BASE = process.env.UBI_BASE || '';
+    static UBI_APP_ID = process.env.UBI_APP_ID || '';
+    static BASIC_AUTH = `Basic ${Buffer.from(`${process.env.UBI_CLIENT_ID}:${process.env.UBI_CLIENT_SECRET}`, 'utf-8').toString('base64')}`;
+    static AXIOS = axios.create({
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': UbiServices.USER_AGENT,
+        },
+    });
     constructor() { }
     async connect(audience = 'NadeoServices') {
         const ticket = await this.requestTicket();
@@ -35,13 +45,3 @@ export default class UbiServices {
         return response.data;
     }
 }
-UbiServices.USER_AGENT = process.env.UBI_USER_AGENT || '';
-UbiServices.UBI_BASE = process.env.UBI_BASE || '';
-UbiServices.UBI_APP_ID = process.env.UBI_APP_ID || '';
-UbiServices.BASIC_AUTH = `Basic ${Buffer.from(`${process.env.UBI_CLIENT_ID}:${process.env.UBI_CLIENT_SECRET}`, 'utf-8').toString('base64')}`;
-UbiServices.AXIOS = axios.create({
-    headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': UbiServices.USER_AGENT,
-    },
-});

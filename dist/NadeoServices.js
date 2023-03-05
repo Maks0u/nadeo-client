@@ -1,5 +1,6 @@
 import UbiServices from './UbiServices.js';
 export default class NadeoServices {
+    static BASEURL = process.env.NADEO_CORE_BASE || '';
     constructor() { }
     static async get(token, path, params = {}) {
         const url = new URL(path, NadeoServices.BASEURL);
@@ -26,4 +27,3 @@ export default class NadeoServices {
         })).data;
     }
 }
-NadeoServices.BASEURL = process.env.NADEO_CORE_BASE || '';
