@@ -5,19 +5,22 @@
   "author": "Maks0u",
   "license": "MIT",
   "type": "module",
-  "main": "build/index.js",
+  "main": "index.js",
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
-    "prestart": "tsc",
     "start": "node index.js",
-    "build": "tsc && esbuild bundle.js --bundle --platform=node --target=esnext --format=esm --outfile=build/index.js"
+    "test": "mocha --timeout 5000",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "pretest": "npm run build"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.13.0",
-    "esbuild": "^0.17.8",
+    "mocha": "^10.2.0",
     "typescript": "^4.9.5"
   },
   "dependencies": {

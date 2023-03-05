@@ -1,5 +1,10 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "compilerOptions": { "module": "ESNext", "removeComments": true },
+  "compilerOptions": {
+    "module": "ESNext",
+    "outDir": "dist",
+    "declaration": true,
+    "removeComments": true
+  },
   "include": ["src/**/*"]
 }
