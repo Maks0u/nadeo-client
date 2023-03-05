@@ -7,9 +7,10 @@
   "type": "module",
   "main": "index.js",
   "files": [
-    "dist"
+    "dist",
+    "index.d.ts"
   ],
-  "types": "dist/types",
+  "types": "index.d.ts",
   "scripts": {
     "start": "node index.js",
     "test": "mocha --timeout 5000",
@@ -20,7 +21,7 @@
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.6",
     "mocha": "^10.2.0",
     "typescript": "^4.9.5"
   },
