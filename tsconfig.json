@@ -1,5 +1,5 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "compilerOptions": { "module": "ES6" },
+  "compilerOptions": { "module": "ES6", "removeComments": true },
   "include": ["src/**/*"]
 }

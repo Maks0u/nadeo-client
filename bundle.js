@@ -1,8 +1,3 @@
-// import Client from './src/Client.js';
-// import { formatTime } from './src/Utils.js';
-// exports.Client = Client;
-// exports.formatTime = formatTime;
-
 import Client from './src/Client.js';
 export default Client;
 export * from './src/Utils.js';

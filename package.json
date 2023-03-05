@@ -12,7 +12,7 @@
   "scripts": {
     "prestart": "tsc",
     "start": "node index.js",
-    "build": "tsc && esbuild bundle.js --bundle --platform=node --minify --outfile=build/index.js"
+    "build": "tsc && esbuild bundle.js --bundle --platform=node --format=esm --minify --outfile=build/index.js"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
