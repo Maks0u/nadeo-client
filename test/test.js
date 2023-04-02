@@ -12,6 +12,11 @@ describe('Client', () => {
             const members = await client.getClubMembers('25', 1, 0);
             assert.ok(members.itemCount);
         });
+        it('getClubActivities', async () => {
+            const activities = await client.getClubActivities('25', 1, 0, true);
+            assert.ok(activities.itemCount);
+            assert.equal(activities.activityList[0].clubId, '25');
+        });
         it('getCampaigns', async () => {
             const campaigns = await client.getCampaigns('Winter 2023', 1, 0);
             assert.ok(campaigns.itemCount);

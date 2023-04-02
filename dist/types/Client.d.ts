@@ -1,4 +1,4 @@
-import { Campaign, Campaigns, Club, ClubMembers, Map } from './NadeoLiveServices.js';
+import { Campaign, Campaigns, Club, ClubActivities, ClubMembers, Map } from './NadeoLiveServices.js';
 import { Record } from './NadeoServices.js';
 import UbiServices from './UbiServices.js';
 export default class Client extends UbiServices {
@@ -16,6 +16,7 @@ export default class Client extends UbiServices {
         displayName: string;
         timestamp: string;
     }[]>;
+    getClubActivities(clubId: string, length?: number, offset?: number, active?: boolean): Promise<ClubActivities>;
     getCampaigns(name: string, length?: number, offset?: number): Promise<Campaigns>;
     getCampaign(name: string): Promise<Campaign>;
     getMap(mapUid: string): Promise<Map>;

@@ -4,6 +4,7 @@ export default class NadeoLiveServices {
     private static get;
     static getClub(token: string, clubId: string): Promise<Club>;
     static getClubMembers(token: string, clubId: string, length: number, offset: number): Promise<ClubMembers>;
+    static getClubActivities(token: string, clubId: string, length: number, offset: number, active: boolean): Promise<ClubActivities>;
     static getCampaigns(token: string, name: string | undefined, length: number, offset: number): Promise<Campaigns>;
     static getMap(token: string, mapUid: string): Promise<Map>;
 }

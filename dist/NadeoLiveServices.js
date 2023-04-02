@@ -23,6 +23,9 @@ export default class NadeoLiveServices {
     static async getClubMembers(token, clubId, length, offset) {
         return (await this.get(token, `api/token/club/${clubId}/member`, { length: length, offset: offset })).data;
     }
+    static async getClubActivities(token, clubId, length, offset, active) {
+        return (await this.get(token, `api/token/club/${clubId}/activity`, { length: length, offset: offset, active: active })).data;
+    }
     static async getCampaigns(token, name = '', length, offset) {
         return (await this.get(token, `api/token/club/campaign`, { length: length, offset: offset, name: name })).data;
     }

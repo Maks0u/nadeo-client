@@ -30,15 +30,15 @@ export default class NadeoLiveServices {
         return (await this.get(token, `api/token/club/${clubId}/member`, { length: length, offset: offset })).data;
     }
 
-    // public static async getClubActivities(
-    //     token: string,
-    //     clubId: string,
-    //     length: number,
-    //     offset: number,
-    //     active: boolean
-    // ): Promise<ClubActivities> {
-    //     return (await this.get(token, `api/token/club/${clubId}/activity`, { length: length, offset: offset, active: active })).data;
-    // }
+    public static async getClubActivities(
+        token: string,
+        clubId: string,
+        length: number,
+        offset: number,
+        active: boolean
+    ): Promise<ClubActivities> {
+        return (await this.get(token, `api/token/club/${clubId}/activity`, { length: length, offset: offset, active: active })).data;
+    }
 
     public static async getCampaigns(token: string, name: string = '', length: number, offset: number): Promise<Campaigns> {
         return (await this.get(token, `api/token/club/campaign`, { length: length, offset: offset, name: name })).data;
