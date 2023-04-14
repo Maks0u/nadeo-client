@@ -40,4 +40,14 @@ describe('Client', () => {
             assert.ok(records.length);
         });
     });
+    describe('Tmio', async () => {
+        it('getTotdMapId', async () => {
+            const id = await client.getTotdMapId();
+            assert.ok(id);
+        });
+        it('getTotdMap', async () => {
+            const totd = await client.getTotdMap();
+            assert.ok(totd.uid);
+        });
+    });
 });

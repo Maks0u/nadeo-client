@@ -16,6 +16,8 @@ UBI_CLIENT_SECRET=""
 UBI_BASE="https://public-ubiservices.ubi.com/"
 NADEO_CORE_BASE="https://prod.trackmania.core.nadeo.online/"
 NADEO_LIVE_BASE="https://live-services.trackmania.nadeo.live/"
+TMIO_USER_AGENT=""
+TMIO_BASE="https://trackmania.io/api/"
 ```
 
 Write your code
@@ -39,6 +41,6 @@ The code above will print the club object
     "id": 25,
     "name": "$s$fffTrackMania $6F9Exchange",
     "tag": "$S$FFFT$6F9MX$Z",
-    "description": "...",
+    "description": "..."
 }
 ```

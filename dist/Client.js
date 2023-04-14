@@ -1,5 +1,6 @@
 import NadeoLiveServices from './NadeoLiveServices.js';
 import NadeoServices from './NadeoServices.js';
+import Tmio from './Tmio.js';
 import Token from './Token.js';
 import UbiServices from './UbiServices.js';
 export default class Client extends UbiServices {
@@ -57,6 +58,12 @@ export default class Client extends UbiServices {
     }
     async getMap(mapUid) {
         return await NadeoLiveServices.getMap(await this.getLiveToken(), mapUid);
+    }
+    async getTotdMap() {
+        return this.getMap(await Tmio.getTotdMapUid());
+    }
+    async getTotdMapId() {
+        return Tmio.getTotdMapId();
     }
     async getMapRecords(accountIdList, mapIdList) {
         return await NadeoServices.getMapRecords(await this.getCoreToken(), accountIdList, mapIdList);

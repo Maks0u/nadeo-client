@@ -20,5 +20,7 @@ export default class Client extends UbiServices {
     getCampaigns(name: string, length?: number, offset?: number): Promise<Campaigns>;
     getCampaign(name: string): Promise<Campaign>;
     getMap(mapUid: string): Promise<Map>;
+    getTotdMap(): Promise<Map>;
+    getTotdMapId(): Promise<string>;
     getMapRecords(accountIdList: string[], mapIdList: string[]): Promise<Record[]>;
 }
