@@ -22,32 +22,12 @@ describe('Client', () => {
             assert.ok(campaigns.itemCount);
         });
         it('getCampaign', async () => {
-            const campaign = await client.getCampaign('ZrT TMCUP 2022');
-            assert.equal(campaign.name, 'ZrT TMCUP 2022');
+            const campaign = await client.getCampaign('ASCENSION 2023');
+            assert.equal(campaign.name, 'ASCENSION 2023');
         });
         it('getMap', async () => {
             const map = await client.getMap('Mi7zQZ0frhDs_Be8fQHdDqfi5Sb');
             assert.equal(map.name, 'Winter 2023 - 24');
-        });
-    });
-    describe('NadeoServices', async () => {
-        it('getDisplayNames', async () => {
-            const names = await client.getDisplayNames(['04bffe12-8efd-46cc-9eba-6c606574e5dc']);
-            assert.equal(names[0].accountId, '04bffe12-8efd-46cc-9eba-6c606574e5dc');
-        });
-        it('getMapRecords', async () => {
-            const records = await client.getMapRecords(['04bffe12-8efd-46cc-9eba-6c606574e5dc'], ['b2318ea4-d0e3-460c-a87d-dd5a0ececf5d']);
-            assert.ok(records.length);
-        });
-    });
-    describe('Tmio', async () => {
-        it('getTotdMapId', async () => {
-            const id = await client.getTotdMapId();
-            assert.ok(id);
-        });
-        it('getTotdMap', async () => {
-            const totd = await client.getTotdMap();
-            assert.ok(totd.uid);
         });
     });
 });

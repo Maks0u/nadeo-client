@@ -26,4 +26,7 @@ export default class Tmio {
     static async getTotdMapUid() {
         return (await this.get('totd/0')).data.days.pop().map.mapUid;
     }
+    static async getCotd() {
+        return (await this.get('cotd/0')).data.competitions.filter((item) => Date.now() > item.starttime * 1000).shift();
+    }
 }

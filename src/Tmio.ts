@@ -32,4 +32,16 @@ export default class Tmio {
     public static async getTotdMapUid(): Promise<string> {
         return (await this.get('totd/0')).data.days.pop().map.mapUid;
     }
+
+    public static async getCotd(): Promise<Cotd> {
+        return (await this.get('cotd/0')).data.competitions.filter((item: Cotd) => Date.now() > item.starttime * 1000).shift();
+    }
+}
+
+export interface Cotd {
+    id: number;
+    name: string;
+    players: number;
+    starttime: number;
+    endtime: number;
 }

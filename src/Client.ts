@@ -1,3 +1,4 @@
+import NadeoClubServices, { Competition, CompetitionRecord } from './NadeoClubServices.js';
 import NadeoLiveServices, { Campaign, Campaigns, Club, ClubActivities, ClubMembers, Map } from './NadeoLiveServices.js';
 import NadeoServices, { Record } from './NadeoServices.js';
 import Tmio from './Tmio.js';
@@ -9,37 +10,37 @@ export default class Client extends UbiServices {
     private coreRefreshToken: Token = new Token();
     private liveToken: Token = new Token();
     private liveRefreshToken: Token = new Token();
+    private clubToken: Token = new Token();
+    private clubRefreshToken: Token = new Token();
 
     constructor() {
         super();
     }
 
     private async getCoreToken(): Promise<string> {
-        if (this.coreToken.isEmpty() || this.coreRefreshToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.connect();
-            this.coreToken.set(accessToken);
-            this.coreRefreshToken.set(refreshToken);
-        }
-        if (this.coreToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.refreshTokens(this.coreRefreshToken.get());
-            this.coreToken.set(accessToken);
-            this.coreRefreshToken.set(refreshToken);
-        }
-        return this.coreToken.get();
+        return this.getToken('NadeoServices', this.coreToken, this.coreRefreshToken);
     }
 
     private async getLiveToken(): Promise<string> {
-        if (this.liveToken.isEmpty() || this.liveRefreshToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.connect('NadeoLiveServices');
-            this.liveToken.set(accessToken);
-            this.liveRefreshToken.set(refreshToken);
+        return this.getToken('NadeoLiveServices', this.liveToken, this.liveRefreshToken);
+    }
+
+    private async getClubToken(): Promise<string> {
+        return this.getToken('NadeoClubServices', this.clubToken, this.clubRefreshToken);
+    }
+
+    private async getToken(audience: string, thisToken: Token, thisRefreshToken: Token): Promise<string> {
+        if (thisToken.isEmpty() || thisRefreshToken.isExpired()) {
+            const { accessToken, refreshToken } = await this.connect(audience);
+            thisToken.set(accessToken);
+            thisRefreshToken.set(refreshToken);
         }
-        if (this.liveToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.refreshTokens(this.liveRefreshToken.get());
-            this.liveToken.set(accessToken);
-            this.liveRefreshToken.set(refreshToken);
+        if (thisToken.isExpired()) {
+            const { accessToken, refreshToken } = await this.refreshTokens(thisRefreshToken.get());
+            thisToken.set(accessToken);
+            thisRefreshToken.set(refreshToken);
         }
-        return this.liveToken.get();
+        return thisToken.get();
     }
 
     async getClub(clubId: string): Promise<Club> {
@@ -81,5 +82,32 @@ export default class Client extends UbiServices {
 
     async getMapRecords(accountIdList: string[], mapIdList: string[]): Promise<Record[]> {
         return await NadeoServices.getMapRecords(await this.getCoreToken(), accountIdList, mapIdList);
+    }
+
+    async getCompetition(competitionId: string): Promise<Competition> {
+        return await NadeoClubServices.getCompetition(await this.getClubToken(), competitionId);
+    }
+
+    async getCompetitionLeaderboard(competitionId: string, length: number = 10, offset: number = 0): Promise<CompetitionRecord[]> {
+        return await NadeoClubServices.getCompetitionLeaderboard(await this.getClubToken(), competitionId, length, offset);
+    }
+
+    async getCompetitionRecords(
+        competitionId: string,
+        accountIdList: string[],
+        length: number = 64,
+        offset: number = 0
+    ): Promise<CompetitionRecord[]> {
+        let records: CompetitionRecord[] = [];
+        const step = length > 255 ? 255 : length;
+        for (let i = offset; i < length; i += 256) {
+            records = records.concat(await this.getCompetitionLeaderboard(competitionId, step, i));
+        }
+        return records.filter(record => accountIdList.includes(record.participant));
+    }
+
+    async getCotdRecords(accountIdList: string[], length: number = 255, offset: number = 0): Promise<CompetitionRecord[]> {
+        const competitionId = (await Tmio.getCotd()).id;
+        return this.getCompetitionRecords(`${competitionId}`, accountIdList, length, offset);
     }
 }
