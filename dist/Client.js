@@ -81,8 +81,7 @@ export default class Client extends UbiServices {
         }
         return records.filter(record => accountIdList.includes(record.participant));
     }
-    async getCotdRecords(accountIdList, length = 255, offset = 0) {
-        const competitionId = (await Tmio.getCotd()).id;
-        return this.getCompetitionRecords(`${competitionId}`, accountIdList, length, offset);
+    async getCotd() {
+        return Tmio.getCotd();
     }
 }

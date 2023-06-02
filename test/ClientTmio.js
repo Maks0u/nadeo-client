@@ -12,5 +12,9 @@ describe('Client', () => {
             const totd = await client.getTotdMap();
             assert.ok(totd.uid);
         });
+        it('getCotd', async () => {
+            const totd = await client.getCotd();
+            assert.ok(totd.id);
+        });
     });
 });

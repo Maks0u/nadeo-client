@@ -1,6 +1,7 @@
 import { Competition, CompetitionRecord } from './NadeoClubServices.js';
 import { Campaign, Campaigns, Club, ClubActivities, ClubMembers, Map } from './NadeoLiveServices.js';
 import { Record } from './NadeoServices.js';
+import { Cotd } from './Tmio.js';
 import UbiServices from './UbiServices.js';
 export default class Client extends UbiServices {
     private coreToken;
@@ -31,5 +32,5 @@ export default class Client extends UbiServices {
     getCompetition(competitionId: string): Promise<Competition>;
     getCompetitionLeaderboard(competitionId: string, length?: number, offset?: number): Promise<CompetitionRecord[]>;
     getCompetitionRecords(competitionId: string, accountIdList: string[], length?: number, offset?: number): Promise<CompetitionRecord[]>;
-    getCotdRecords(accountIdList: string[], length?: number, offset?: number): Promise<CompetitionRecord[]>;
+    getCotd(): Promise<Cotd>;
 }

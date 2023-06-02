@@ -1,7 +1,7 @@
 import NadeoClubServices, { Competition, CompetitionRecord } from './NadeoClubServices.js';
 import NadeoLiveServices, { Campaign, Campaigns, Club, ClubActivities, ClubMembers, Map } from './NadeoLiveServices.js';
 import NadeoServices, { Record } from './NadeoServices.js';
-import Tmio from './Tmio.js';
+import Tmio, { Cotd } from './Tmio.js';
 import Token from './Token.js';
 import UbiServices from './UbiServices.js';
 
@@ -106,8 +106,7 @@ export default class Client extends UbiServices {
         return records.filter(record => accountIdList.includes(record.participant));
     }
 
-    async getCotdRecords(accountIdList: string[], length: number = 255, offset: number = 0): Promise<CompetitionRecord[]> {
-        const competitionId = (await Tmio.getCotd()).id;
-        return this.getCompetitionRecords(`${competitionId}`, accountIdList, length, offset);
+    async getCotd(): Promise<Cotd> {
+        return Tmio.getCotd();
     }
 }

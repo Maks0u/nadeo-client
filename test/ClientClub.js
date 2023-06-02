@@ -22,7 +22,10 @@ describe('Client', () => {
             assert.equal(records[0].rank, 288);
         });
         it('getCotdRecords', async () => {
-            const records = await client.getCotdRecords(
+            const records = await client.getCompetitionRecords(
+                (
+                    await client.getCotd()
+                ).id,
                 ['da4642f9-6acf-43fe-88b6-b120ff1308ba', '05477e79-25fd-48c2-84c7-e1621aa46517', 'd46fb45d-d422-47c9-9785-67270a311e25'],
                 10
             );
