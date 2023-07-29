@@ -7,40 +7,36 @@ import UbiServices from './UbiServices.js';
 
 export default class Client extends UbiServices {
     private coreToken: Token = new Token();
-    private coreRefreshToken: Token = new Token();
     private liveToken: Token = new Token();
-    private liveRefreshToken: Token = new Token();
     private clubToken: Token = new Token();
-    private clubRefreshToken: Token = new Token();
 
     constructor() {
         super();
     }
 
     private async getCoreToken(): Promise<string> {
-        return this.getToken('NadeoServices', this.coreToken, this.coreRefreshToken);
+        this.coreToken = await this.getToken('NadeoServices', this.coreToken);
+        return this.coreToken.toString();
     }
 
     private async getLiveToken(): Promise<string> {
-        return this.getToken('NadeoLiveServices', this.liveToken, this.liveRefreshToken);
+        this.liveToken = await this.getToken('NadeoLiveServices', this.liveToken);
+        return this.liveToken.toString();
     }
 
     private async getClubToken(): Promise<string> {
-        return this.getToken('NadeoClubServices', this.clubToken, this.clubRefreshToken);
+        this.clubToken = await this.getToken('NadeoClubServices', this.clubToken);
+        return this.clubToken.toString();
     }
 
-    private async getToken(audience: string, thisToken: Token, thisRefreshToken: Token): Promise<string> {
-        if (thisToken.isEmpty() || thisRefreshToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.connect(audience);
-            thisToken.set(accessToken);
-            thisRefreshToken.set(refreshToken);
+    private async getToken(audience: string, token: Token): Promise<Token> {
+        if (token.isObsolete()) {
+            return await this.connect(audience);
         }
-        if (thisToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.refreshTokens(thisRefreshToken.get());
-            thisToken.set(accessToken);
-            thisRefreshToken.set(refreshToken);
+        if (token.isExpired()) {
+            return await this.refreshToken(token);
         }
-        return thisToken.get();
+        return token;
     }
 
     async getClub(clubId: string): Promise<Club> {

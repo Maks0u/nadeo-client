@@ -29,7 +29,7 @@ describe('Client', () => {
                 ['da4642f9-6acf-43fe-88b6-b120ff1308ba', '05477e79-25fd-48c2-84c7-e1621aa46517', 'd46fb45d-d422-47c9-9785-67270a311e25'],
                 10
             );
-            assert.ok(records.length);
+            assert.ok(records.length > 0);
         });
     });
 });

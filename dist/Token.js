@@ -1,13 +1,26 @@
 export default class Token {
+    accessToken;
+    refreshToken;
+    constructor(accessTokenString = '', refreshTokenString = '') {
+        this.accessToken = new UbiToken(accessTokenString);
+        this.refreshToken = new UbiToken(refreshTokenString);
+    }
+    toString() {
+        return this.accessToken.toString();
+    }
+    isExpired() {
+        return this.accessToken.isExpired();
+    }
+    isObsolete() {
+        return this.accessToken.isExpired() && this.refreshToken.isExpired();
+    }
+}
+class UbiToken {
     token;
     constructor(token = '') {
         this.token = token;
     }
-    set(token) {
-        this.token = token;
-        return this;
-    }
-    get() {
+    toString() {
         return this.token;
     }
     decode() {
@@ -17,7 +30,10 @@ export default class Token {
         return 0 === this.token.length;
     }
     isExpired() {
-        return Date.now() > this.decode().exp * 1000;
+        return this.isEmpty() || Date.now() > this.getExpirationDate() * 1000;
+    }
+    getExpirationDate() {
+        return this.decode().exp;
     }
     getUserName() {
         return this.decode().aun;

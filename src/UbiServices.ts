@@ -1,8 +1,19 @@
 import axios, { AxiosInstance } from 'axios';
+import logger from 'logger';
 import NadeoServices from './NadeoServices.js';
+import Token from './Token.js';
+import { requestErrorLogger, requestLogger } from './Utils.js';
+
+const requestHandler = axios.create({
+    headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': process.env.UBI_USER_AGENT || '',
+    },
+});
+
+requestHandler.interceptors.response.use(requestLogger, requestErrorLogger);
 
 export default class UbiServices {
-    private static USER_AGENT: string = process.env.UBI_USER_AGENT || '';
     private static UBI_BASE: string = process.env.UBI_BASE || '';
     private static UBI_APP_ID: string = process.env.UBI_APP_ID || '';
     private static BASIC_AUTH: string = `Basic ${Buffer.from(
@@ -10,18 +21,15 @@ export default class UbiServices {
         'utf-8'
     ).toString('base64')}`;
 
-    public static AXIOS: AxiosInstance = axios.create({
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': UbiServices.USER_AGENT,
-        },
-    });
+    public static AXIOS: AxiosInstance = requestHandler;
 
     constructor() {}
 
-    protected async connect(audience: string = 'NadeoServices'): Promise<{ accessToken: string; refreshToken: string }> {
+    protected async connect(audience: string = 'NadeoServices'): Promise<Token> {
         const ticket = await this.requestTicket();
-        return await this.requestTokens(ticket, audience);
+        const token = await this.requestToken(ticket, audience);
+        logger.verbose(`new connection \u00b7 ${audience}`);
+        return token;
     }
 
     private async requestTicket(): Promise<string> {
@@ -36,10 +44,10 @@ export default class UbiServices {
                 },
             }
         );
-        return response.data.ticket;
+        return response.data?.ticket;
     }
 
-    private async requestTokens(ticket: string, audience: string): Promise<{ accessToken: string; refreshToken: string }> {
+    private async requestToken(ticket: string, audience: string): Promise<Token> {
         const url = new URL('v2/authentication/token/ubiservices', NadeoServices.BASEURL);
         const response = await UbiServices.AXIOS.post(
             url.href,
@@ -50,20 +58,20 @@ export default class UbiServices {
                 },
             }
         );
-        return response.data;
+        return new Token(response.data?.accessToken, response.data?.refreshToken);
     }
 
-    protected async refreshTokens(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+    protected async refreshToken(token: Token): Promise<Token> {
         const url = new URL('v2/authentication/token/refresh', NadeoServices.BASEURL);
         const response = await UbiServices.AXIOS.post(
             url.href,
             {},
             {
                 headers: {
-                    Authorization: `nadeo_v1 t=${refreshToken}`,
+                    Authorization: `nadeo_v1 t=${token.refreshToken.toString()}`,
                 },
             }
         );
-        return response.data;
+        return new Token(response.data?.accessToken, response.data?.refreshToken);
     }
 }

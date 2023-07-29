@@ -1,15 +1,18 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { requestErrorLogger, requestLogger } from './Utils.js';
+
+const requestHandler: AxiosInstance = axios.create({
+    headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': process.env.TMIO_USER_AGENT || '',
+    },
+});
+
+requestHandler.interceptors.response.use(requestLogger, requestErrorLogger);
 
 export default class Tmio {
-    private static USER_AGENT: string = process.env.TMIO_USER_AGENT || '';
     private static BASEURL: string = process.env.TMIO_BASE || '';
-
-    public static AXIOS: AxiosInstance = axios.create({
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': Tmio.USER_AGENT,
-        },
-    });
+    public static AXIOS: AxiosInstance = requestHandler;
 
     constructor() {}
 

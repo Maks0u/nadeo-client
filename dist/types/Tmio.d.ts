@@ -1,6 +1,5 @@
 import { AxiosInstance } from 'axios';
 export default class Tmio {
-    private static USER_AGENT;
     private static BASEURL;
     static AXIOS: AxiosInstance;
     constructor();

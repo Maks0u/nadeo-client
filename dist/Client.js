@@ -6,35 +6,31 @@ import Token from './Token.js';
 import UbiServices from './UbiServices.js';
 export default class Client extends UbiServices {
     coreToken = new Token();
-    coreRefreshToken = new Token();
     liveToken = new Token();
-    liveRefreshToken = new Token();
     clubToken = new Token();
-    clubRefreshToken = new Token();
     constructor() {
         super();
     }
     async getCoreToken() {
-        return this.getToken('NadeoServices', this.coreToken, this.coreRefreshToken);
+        this.coreToken = await this.getToken('NadeoServices', this.coreToken);
+        return this.coreToken.toString();
     }
     async getLiveToken() {
-        return this.getToken('NadeoLiveServices', this.liveToken, this.liveRefreshToken);
+        this.liveToken = await this.getToken('NadeoLiveServices', this.liveToken);
+        return this.liveToken.toString();
     }
     async getClubToken() {
-        return this.getToken('NadeoClubServices', this.clubToken, this.clubRefreshToken);
+        this.clubToken = await this.getToken('NadeoClubServices', this.clubToken);
+        return this.clubToken.toString();
     }
-    async getToken(audience, thisToken, thisRefreshToken) {
-        if (thisToken.isEmpty() || thisRefreshToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.connect(audience);
-            thisToken.set(accessToken);
-            thisRefreshToken.set(refreshToken);
+    async getToken(audience, token) {
+        if (token.isObsolete()) {
+            return await this.connect(audience);
         }
-        if (thisToken.isExpired()) {
-            const { accessToken, refreshToken } = await this.refreshTokens(thisRefreshToken.get());
-            thisToken.set(accessToken);
-            thisRefreshToken.set(refreshToken);
+        if (token.isExpired()) {
+            return await this.refreshToken(token);
         }
-        return thisToken.get();
+        return token;
     }
     async getClub(clubId) {
         return await NadeoLiveServices.getClub(await this.getLiveToken(), clubId);

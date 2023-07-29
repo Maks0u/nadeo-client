@@ -1,13 +1,15 @@
 import axios from 'axios';
+import { requestErrorLogger, requestLogger } from './Utils.js';
+const requestHandler = axios.create({
+    headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': process.env.TMIO_USER_AGENT || '',
+    },
+});
+requestHandler.interceptors.response.use(requestLogger, requestErrorLogger);
 export default class Tmio {
-    static USER_AGENT = process.env.TMIO_USER_AGENT || '';
     static BASEURL = process.env.TMIO_BASE || '';
-    static AXIOS = axios.create({
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': Tmio.USER_AGENT,
-        },
-    });
+    static AXIOS = requestHandler;
     constructor() { }
     static async get(path, params = {}) {
         const url = new URL(path, Tmio.BASEURL);

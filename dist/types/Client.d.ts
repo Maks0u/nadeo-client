@@ -5,11 +5,8 @@ import { Cotd } from './Tmio.js';
 import UbiServices from './UbiServices.js';
 export default class Client extends UbiServices {
     private coreToken;
-    private coreRefreshToken;
     private liveToken;
-    private liveRefreshToken;
     private clubToken;
-    private clubRefreshToken;
     constructor();
     private getCoreToken;
     private getLiveToken;
