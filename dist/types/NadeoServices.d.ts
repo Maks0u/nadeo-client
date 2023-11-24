@@ -2,11 +2,6 @@ export default class NadeoServices {
     static BASEURL: string;
     constructor();
     private static get;
-    static getDisplayNames(token: string, accountIdList: string[]): Promise<{
-        accountId: string;
-        displayName: string;
-        timestamp: string;
-    }[]>;
     static getMapRecords(token: string, accountIdList: string[], mapIdList: string[]): Promise<Record[]>;
 }
 export interface Record {

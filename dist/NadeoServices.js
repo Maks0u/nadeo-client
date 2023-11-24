@@ -17,9 +17,6 @@ export default class NadeoServices {
             throw new Error(error.message);
         });
     }
-    static async getDisplayNames(token, accountIdList) {
-        return (await this.get(token, 'accounts/displayNames/', { accountIdList: accountIdList.join(',') })).data;
-    }
     static async getMapRecords(token, accountIdList, mapIdList) {
         return (await this.get(token, 'mapRecords/', {
             accountIdList: accountIdList.join(','),

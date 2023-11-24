@@ -22,13 +22,6 @@ export default class NadeoServices {
             });
     }
 
-    public static async getDisplayNames(
-        token: string,
-        accountIdList: string[]
-    ): Promise<{ accountId: string; displayName: string; timestamp: string }[]> {
-        return (await this.get(token, 'accounts/displayNames/', { accountIdList: accountIdList.join(',') })).data;
-    }
-
     public static async getMapRecords(token: string, accountIdList: string[], mapIdList: string[]): Promise<Record[]> {
         return (
             await this.get(token, 'mapRecords/', {

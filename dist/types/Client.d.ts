@@ -14,11 +14,6 @@ export default class Client extends UbiServices {
     private getToken;
     getClub(clubId: string): Promise<Club>;
     getClubMembers(clubId: string, length?: number, offset?: number): Promise<ClubMembers>;
-    getDisplayNames(accountIdList: string[]): Promise<{
-        accountId: string;
-        displayName: string;
-        timestamp: string;
-    }[]>;
     getClubActivities(clubId: string, length?: number, offset?: number, active?: boolean): Promise<ClubActivities>;
     getCampaigns(name: string, length?: number, offset?: number): Promise<Campaigns>;
     getCampaign(name: string): Promise<Campaign>;

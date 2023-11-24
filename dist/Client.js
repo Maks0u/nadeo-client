@@ -38,9 +38,6 @@ export default class Client extends UbiServices {
     async getClubMembers(clubId, length = 20, offset = 0) {
         return await NadeoLiveServices.getClubMembers(await this.getLiveToken(), clubId, length, offset);
     }
-    async getDisplayNames(accountIdList) {
-        return await NadeoServices.getDisplayNames(await this.getCoreToken(), accountIdList);
-    }
     async getClubActivities(clubId, length = 10, offset = 0, active = true) {
         return await NadeoLiveServices.getClubActivities(await this.getLiveToken(), clubId, length, offset, active);
     }

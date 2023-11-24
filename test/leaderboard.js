@@ -37,16 +37,10 @@ describe('Leaderboard', () => {
             'bf06de13-8d35-431e-9ecc-8625797ef47e',
             'df70348a-8db0-4384-92b0-bdd909582cd4',
         ];
-        const displayNames = new Map(
-            (await client.getDisplayNames(players)).map(n => {
-                return [n.accountId, n];
-            })
-        );
         const records = await client.getMapRecords(players, Array.from(maps.keys()));
         records.forEach(record => {
             maps.get(record.mapId).records.push({
                 accountId: record.accountId,
-                displayName: displayNames.get(record.accountId).displayName,
                 time: record.recordScore.time,
             });
         });
@@ -62,8 +56,8 @@ describe('Leaderboard', () => {
             const records = Array.from(map.records);
             const first = records.shift();
             map.records = records.reduce(
-                (a, b) => `${a}\n${formatTime(b.time)} - ${b.displayName}`,
-                `${formatTime(first.time)} - ${first.displayName}`
+                (a, b) => `${a}\n${formatTime(b.time)} - ${b.accountId}`,
+                `${formatTime(first.time)} - ${first.accountId}`
             );
         });
         // console.log(maps.values());
